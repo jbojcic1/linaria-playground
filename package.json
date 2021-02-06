@@ -24,6 +24,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "build:dev": "REACT_APP_NO_MINIFY=true yarn build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
