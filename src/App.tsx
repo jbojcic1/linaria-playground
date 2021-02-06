@@ -1,25 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from 'react';
+import { css } from '@linaria/core';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { A } from './A';
+import { B } from './B';
+
+// Since component C is lazy loaded it's linaria css will not be included
+// in the first render. If we eagerly load it will
+const C = React.lazy(() => import('./C'));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Router>
+      <header
+        className={css`
+          background: yellow;
+          height: var(--box-size);
+          width: var(--box-size);
+        `}
+      >
+        <Link
+          className={css`
+            margin-right: 10px;
+          `}
+          to="/"
         >
-          Learn React
-        </a>
+          Page A
+        </Link>
+        <Link
+          className={css`
+            margin-right: 10px;
+          `}
+          to="/b"
+        >
+          Page B
+        </Link>
+        <Link
+          className={css`
+            margin-right: 10px;
+          `}
+          to="/c"
+        >
+          Page C
+        </Link>
       </header>
-    </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" exact>
+            <A />
+          </Route>
+          <Route path="/b">
+            <B />
+          </Route>
+          <Route path="/c">
+            <C />
+          </Route>
+        </Switch>
+      </Suspense>
+
+    </Router>
   );
 }
 
